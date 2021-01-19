@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node src/cli/index.ts"
+    "dev": "ts-node src/cli/index.ts",
+    "create-tables": "ts-node src/data/createTables.ts"
   },
   "bin": {
     "random-quotes": "./src/cli/index.ts"

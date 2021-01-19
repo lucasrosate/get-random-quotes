@@ -7,7 +7,7 @@ import {
     SQL_PORT
 } from './config';
 
-const connection: mysql.Connection = mysql.createConnection({
+const con: mysql.Connection = mysql.createConnection({
     connectTimeout: 10,
     host: SQL_SERVER,
     user: SQL_USER,
@@ -18,4 +18,4 @@ const connection: mysql.Connection = mysql.createConnection({
 
 
 
-export default connection;
+export default con;

@@ -4,46 +4,54 @@ import {
     addTagQuoteQuery
 } from './queries/addQuote';
 
-import connection from './config/connection';
+import con from './config/connection';
+import { MysqlError } from 'mysql';
 
 
 const insertNewQuote = (quotes: IQuote[]) => {
-    connection.connect(err => console.log(err));
+    con.connect(err => {
+        if (err) {
+            console.log("Connection error!");
+            throw err;
+        }
 
+        quotes.map((quote, index) => {
+            const stringOverwrite = /'/g;
+            const placeholder = "!@#$"
+            quote.content = quote.content.replace(stringOverwrite, placeholder);
+            quote.originator.name = quote.originator.name.replace(stringOverwrite, placeholder);
+            quote.originator.url = quote.originator.url.replace(stringOverwrite, placeholder);
+            quote.url = quote.url.replace(stringOverwrite, placeholder);
 
-    quotes.map((quote, index) => {
-        const addAuthorQuote =
-            connection.query(addAuthorQuoteQuery(quote), (err, results, field) => {
-                if (err) return err;
-
+            con.query(addAuthorQuoteQuery(quote), (err, results, field) => {
+                if (err) throw err;
                 return results;
             });
 
-        const addQuoteText =
-            connection.query(addQuoteTextQuery(quote), (err, results, field) => {
-                if (err) return err;
-
+            con.query(addQuoteTextQuery(quote), (err, results, field) => {
+                if (err) throw err;
                 return results;
             });
 
-        const addTagQuote =
-            connection.query(addTagQuoteQuery(quote, index), (err, results, field) => {
-                if (err) return err;
-
-                return results;
-            });
-
-            console.log(addAuthorQuote);
+            quote.tags.map((tag: string, indexTag: number) => {
+                quote.tags[indexTag] = quote.tags[indexTag].replace(stringOverwrite, placeholder);
+                console.log
+                con.query(addTagQuoteQuery(quote, indexTag), (err, results, field) => {
+                    if (err) throw err;
+                    return results;
+                });
+            })
+        });
+        con.end();
     });
 
-    connection.end();
 }
 
 
 
 
 
-// const addQuoteText = connection.query(addQuoteTextQuery(quote), (err, results, field) => {
+// const addQuoteText = con.query(addQuoteTextQuery(quote), (err, results, field) => {
 //     if (err) return err;
 //     return results;
 // });
@@ -52,7 +60,7 @@ const insertNewQuote = (quotes: IQuote[]) => {
 
 // for (let i = 0; i < quote.tags.length; i++) {
 //     addTagQuote.push(
-//         connection.query(addTagQuoteQuery(quote, i), (err, results, field) => {
+//         con.query(addTagQuoteQuery(quote, i), (err, results, field) => {
 //             if (err) return err;
 //             return results;
 //         })

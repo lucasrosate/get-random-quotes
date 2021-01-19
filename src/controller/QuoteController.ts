@@ -21,7 +21,7 @@ export const generateQuotes = async (quantity: number) => {
 
         for (let i = 0; i < quantity; i++) {
             console.log(`Processing quote ${i + 1}...`)
-            response = await Promise.all([fetchData(), timeout(1500)])
+            response = await Promise.all([fetchData(), timeout(parseInt(process.env.DELAY_BETWEEN_REQUESTS!) || 1500)])
             newQuote = new Quote(response[0].data);
             newQuotes.push(newQuote);
 
@@ -65,14 +65,14 @@ ${chalk.bold(`tags:`)}${quote.tags.map((tag, index) => ` ${tag}`)}.
     } else {
         const quote = data;
 
-        displayQuote = `
-        ${chalk.yellow.bgGray.bold(`\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0Quote\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0`)}
-        ${chalk.bold(`Message:`)} ${quote.content}
-        ${chalk.bold(`Author:`)} ${quote.originator.name}
-        ${chalk.bold(`Message url:`)} ${quote.url}
-        ${chalk.bold(`Author url:`)} ${quote.originator.url}
-        ${chalk.bold(`tags:`)}${quote.tags.map((tag, index) => ` ${tag}`)}.
-        `
+displayQuote = `
+${chalk.yellow.bgGray.bold(`\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0Quote\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0`)}
+${chalk.bold(`Message:`)} ${quote.content}
+${chalk.bold(`Author:`)} ${quote.originator.name}
+${chalk.bold(`Message url:`)} ${quote.url}
+${chalk.bold(`Author url:`)} ${quote.originator.url}
+${chalk.bold(`tags:`)}${quote.tags.map((tag, index) => ` ${tag}`)}.
+`
     }
 
     return displayQuote;
