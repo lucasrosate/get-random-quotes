@@ -5,8 +5,6 @@ import {
 } from './queries/addQuote';
 
 import con from './config/connection';
-import { MysqlError } from 'mysql';
-
 
 const insertNewQuote = (quotes: IQuote[]) => {
     con.connect(err => {
@@ -35,13 +33,15 @@ const insertNewQuote = (quotes: IQuote[]) => {
 
             quote.tags.map((tag: string, indexTag: number) => {
                 quote.tags[indexTag] = quote.tags[indexTag].replace(stringOverwrite, placeholder);
-                console.log
                 con.query(addTagQuoteQuery(quote, indexTag), (err, results, field) => {
                     if (err) throw err;
                     return results;
                 });
             })
         });
+
+        console.log("Saved with success!")
+
         con.end();
     });
 

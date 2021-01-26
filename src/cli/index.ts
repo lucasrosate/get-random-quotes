@@ -30,7 +30,8 @@ prompt([{
 }])
 
     .then((answerOptionsGenerator) => {
-        if (answerOptionsGenerator === "exit") return;
+        console.log("\n");
+        if (answerOptionsGenerator['Options'] === "Exit.") return;
         prompt([{
             type: "number",
             name: "NumberQuotes",
@@ -48,15 +49,11 @@ prompt([{
 
                     case options[1]:
                         console.log(displayQuotes(generatedQuotes));
-
                         saveQuotes(generatedQuotes as IQuote[])
-
                         break;
 
                     case options[2]:
-
                         saveQuotes(generatedQuotes as IQuote[])
-
                         break;
 
                 }

@@ -23,6 +23,8 @@ const createTables = () => {
             if (err) return err;
         });
         connection.end();
+
+        console.log("Created with success!")
     });
 
 
